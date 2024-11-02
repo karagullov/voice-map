@@ -1,6 +1,7 @@
 // Map.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl, { Map as MapboxMap } from 'mapbox-gl';
+//@ts-ignore
 import MapboxDirections from '@mapbox/mapbox-sdk/services/directions';
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoia2FyYWd1bGxvdiIsImEiOiJjbTMwMG9zcm4wZXFhMnNyM3YxZ2Z4OGVqIn0.lsVyaFW5i3i56xjvWTTlyA';
@@ -43,7 +44,7 @@ const Map: React.FC<MapProps> = ({ userLocation, destination, onDirectionsAvaila
           geometries: 'geojson', // Make sure we get a GeoJSON response
         })
         .send()
-        .then((response) => {
+        .then((response:any) => {
           const route = response.body.routes[0].geometry.coordinates;
           const routeLine = {
             type: 'Feature',
@@ -52,8 +53,10 @@ const Map: React.FC<MapProps> = ({ userLocation, destination, onDirectionsAvaila
 
           // Set data for the route
           if (map.current!.getSource('route')) {
+            //@ts-ignore
             (map.current!.getSource('route') as mapboxgl.GeoJSONSource).setData(routeLine);
           } else {
+            //@ts-ignore
             map.current!.addSource('route', { type: 'geojson', data: routeLine });
             map.current!.addLayer({
               id: 'route',
@@ -64,10 +67,13 @@ const Map: React.FC<MapProps> = ({ userLocation, destination, onDirectionsAvaila
             });
           }
 
+
           // Extract and provide instructions
+            //@ts-ignore
           const directions = response.body.routes[0].legs[0].steps.map(step => step.maneuver.instruction);
           onDirectionsAvailable(directions); // Pass instructions back to the App component
         })
+            //@ts-ignore
         .catch(error => {
           console.error('Error fetching directions:', error);
         });
