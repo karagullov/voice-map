@@ -14,6 +14,7 @@ const App: React.FC = () => {
   const [destination, setDestination] = useState<[number, number] | null>(null);
   const [directions, setDirections] = useState<string[]>([]);
   const [currentDirectionIndex, setCurrentDirectionIndex] = useState(0);
+  const [words,setWords]=useState('')
 
   // Получение текущего местоположения пользователя
   useEffect(() => {
@@ -42,7 +43,7 @@ const App: React.FC = () => {
       // Проверка на наличие последнего результата
       if (lastResult && lastResult.isFinal) {
         const transcript = lastResult[0].transcript.trim().toLowerCase();
-
+        setWords(transcript)
         // Слушаем команду для навигации к Центральной площади
         if (transcript.includes('навигация к центральной площади')) {
           if (userLocation) {
@@ -95,8 +96,10 @@ const App: React.FC = () => {
 
   return (
     <div>
+
       <h1>Доступная навигация</h1>
       <Map userLocation={userLocation} destination={destination} onDirectionsAvailable={handleDirectionsAvailable} />
+      <p>{words}</p>
       <p>Скажите "навигация к центральной площади", чтобы начать навигацию.</p>
     </div>
   );
